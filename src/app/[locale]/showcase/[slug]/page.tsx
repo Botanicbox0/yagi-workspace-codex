@@ -12,10 +12,12 @@ export default async function ShowcasePage({ params }: ShowcasePageProps) {
   return (
     <PublicSurface locale={locale} tone="profile">
       <main className="public-main">
-        <section className="public-hero">
-          <span className="eyebrow">Showcase</span>
-          <h1>{slug}</h1>
-          <p>승인된 공개 작업만 노출하는 쇼케이스 표면입니다.</p>
+        <section className="public-hero public-hero--profile">
+          <div className="public-hero__copy">
+            <span className="eyebrow">Showcase</span>
+            <h1>{slug}</h1>
+            <p>승인된 공개 작업만 보여주는 쇼케이스 표면입니다.</p>
+          </div>
         </section>
       </main>
     </PublicSurface>

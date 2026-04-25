@@ -1,12 +1,13 @@
-import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { localePath, type Locale } from "@/i18n/config";
+import { type Locale } from "@/i18n/config";
 import {
   getPrimaryWorkspaceRole,
   hasYagiAdminRole,
   type RouteUserContext,
 } from "@/lib/auth/roles";
+
+import { Sidebar } from "./Sidebar";
 
 type AppShellProps = {
   children: ReactNode;
@@ -14,63 +15,25 @@ type AppShellProps = {
   user: RouteUserContext;
 };
 
-const navigationGroups = [
-  {
-    label: "작업",
-    items: [
-      { label: "프로젝트", href: "/app/projects" },
-      { label: "프리프로덕션", href: "/app/projects/new" },
-      { label: "릴리즈", href: "/app/projects" },
-    ],
-  },
-  {
-    label: "운영",
-    items: [
-      { label: "알림", href: "/app/notifications" },
-      { label: "설정", href: "/app/settings" },
-    ],
-  },
-] as const;
+const roleLabels: Record<string, string> = {
+  yagi_admin: "YAGI 관리자",
+  yagi_member: "YAGI 멤버",
+  client_admin: "클라이언트 관리자",
+  client_member: "클라이언트 멤버",
+};
 
 export function AppShell({ children, locale, user }: AppShellProps) {
   const primaryRole = getPrimaryWorkspaceRole(user);
-  const adminHref = localePath(locale, "/app/admin");
 
   return (
     <div className="app-shell">
-      <aside className="app-sidebar" aria-label="YAGI Workspace">
-        <Link className="brand-mark" href={localePath(locale, "/app")}>
-          <span>YAGI</span>
-          <strong>Workspace</strong>
-        </Link>
-
-        <div className="scope-card">
-          <span className="eyebrow">현재 범위</span>
-          <strong>{user.workspaceMemberships[0]?.workspaceName}</strong>
-          <small>{primaryRole ?? "profile"}</small>
-        </div>
-
-        <nav className="sidebar-nav" aria-label="작업 내비게이션">
-          {navigationGroups.map((group) => (
-            <section className="nav-group" key={group.label}>
-              {group.items.length > 1 ? <h2>{group.label}</h2> : null}
-              {group.items.map((item) => (
-                <Link key={item.href} href={localePath(locale, item.href)}>
-                  {item.label}
-                </Link>
-              ))}
-            </section>
-          ))}
-
-          {hasYagiAdminRole(user) ? (
-            <section className="nav-group">
-              <h2>시스템</h2>
-              <Link href={adminHref}>관리자</Link>
-            </section>
-          ) : null}
-        </nav>
-      </aside>
-
+      <Sidebar
+        displayName={user.displayName}
+        isAdmin={hasYagiAdminRole(user)}
+        locale={locale}
+        roleLabel={primaryRole ? roleLabels[primaryRole] : "프로필"}
+        workspaceName={user.workspaceMemberships[0]?.workspaceName ?? "YAGI"}
+      />
       <main className="app-main">{children}</main>
     </div>
   );

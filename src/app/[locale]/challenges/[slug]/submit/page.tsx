@@ -16,10 +16,10 @@ export default async function ChallengeSubmitPage({
 
   return (
     <main className="public-main">
-      <section className="surface-card">
+      <section className="submission-panel">
         <span className="eyebrow">제출</span>
         <h1>{slug}</h1>
-        <p>{user.displayName} 님의 창작자 제출 흐름이 연결될 자리입니다.</p>
+        <p>{user.displayName} 님의 창작물 제출 흐름을 연결할 자리입니다.</p>
       </section>
     </main>
   );

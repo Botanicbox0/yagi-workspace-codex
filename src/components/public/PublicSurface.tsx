@@ -18,7 +18,8 @@ export function PublicSurface({
     <div className={`public-surface public-surface--${tone}`}>
       <header className="public-header">
         <Link href={localePath(locale, "/challenges")} className="public-brand">
-          YAGI
+          <span>YAGI</span>
+          <strong>{tone === "challenge" ? "Challenge" : "Archive"}</strong>
         </Link>
         <nav aria-label="공개 내비게이션">
           <Link href={localePath(locale, "/challenges")}>챌린지</Link>

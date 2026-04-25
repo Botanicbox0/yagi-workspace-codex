@@ -14,10 +14,15 @@ export default async function CreatorProfilePage({
   return (
     <PublicSurface locale={locale} tone="profile">
       <main className="public-main">
-        <section className="public-hero">
-          <span className="eyebrow">Creator</span>
-          <h1>@{handle}</h1>
-          <p>창작자 프로필은 클라이언트 워크스페이스와 별도 표면에서 운영됩니다.</p>
+        <section className="public-hero public-hero--profile">
+          <div className="public-hero__copy">
+            <span className="eyebrow">Creator</span>
+            <h1>@{handle}</h1>
+            <p>
+              창작자 프로필은 클라이언트 워크스페이스와 분리된 공개 아카이브
+              표면으로 운영합니다.
+            </p>
+          </div>
         </section>
       </main>
     </PublicSurface>
