@@ -16,6 +16,30 @@ Default locale is Korean (`ko`). English (`en`) is optional and must not comprom
 4. Implement gate-by-gate. Do not ask Codex to build the entire product in one pass.
 5. Run typecheck, lint, build, and the required smoke tests at every gate.
 
+## Agent workflow
+
+YAGI gates should use the repo-specific agent operating system in `docs/agents/`.
+
+Required sequence:
+
+```text
+Plan -> Build -> Review -> Fix -> Ship
+```
+
+Agent chain:
+
+```text
+Orchestrator -> Builder -> Specialist Reviewers -> Release Manager
+```
+
+- Use `docs/agents/ORCHESTRATOR.md` to define scope and reviewers.
+- Use `docs/agents/BUILDER.md` for implementation and verification.
+- Use specialist reviewers for changed surfaces: Design Director, Engineering Reviewer, Security RLS Reviewer, QA Reviewer, or Docs Keeper.
+- Use `docs/agents/RELEASE_MANAGER.md` before commit and push.
+- Use `prompts/commands/*.md` as copy-paste Codex prompts for repeatable gates.
+
+Do not run uncontrolled parallel autopilot. Keep each gate sequential, bounded, reviewed, and shippable.
+
 ## Recommended command flow
 
 ```bash
