@@ -14,7 +14,7 @@ Default locale is Korean (`ko`). English (`en`) is optional and must not comprom
 2. Commit the docs before implementation.
 3. Ask Codex to read `AGENTS.md` first.
 4. Implement gate-by-gate. Do not ask Codex to build the entire product in one pass.
-5. Run typecheck, lint, build, and the required smoke tests at every gate.
+5. Run typecheck, lint, build, and relevant smoke checks at each implementation gate.
 
 ## Agent workflow
 
@@ -34,11 +34,34 @@ Orchestrator -> Builder -> Specialist Reviewers -> Release Manager
 
 - Use `docs/agents/ORCHESTRATOR.md` to define scope and reviewers.
 - Use `docs/agents/BUILDER.md` for implementation and verification.
-- Use specialist reviewers for changed surfaces: Design Director, Engineering Reviewer, Security RLS Reviewer, QA Reviewer, or Docs Keeper.
+- Use specialist reviewers only for changed surfaces.
 - Use `docs/agents/RELEASE_MANAGER.md` before commit and push.
 - Use `prompts/commands/*.md` as copy-paste Codex prompts for repeatable gates.
 
 Do not run uncontrolled parallel autopilot. Keep each gate sequential, bounded, reviewed, and shippable.
+
+## MVP-speed operating mode
+
+Use MVP Security Mode during MVP development.
+
+Security should prevent real cross-user leaks, private file leaks, service-role exposure, and approval/version corruption. It should not create enterprise-heavy process for theoretical risks that have no reachable user-facing path.
+
+Do not require all reviewers for every gate:
+- Security RLS Reviewer only for DB/RLS/auth/storage/signed URL/private-public boundary changes.
+- Design Director only for UI/copy/design changes.
+- Docs Keeper only for docs/prompts/ADR changes.
+- QA Reviewer for final smoke checks or changed behavior.
+- Engineering Reviewer for non-trivial implementation, architecture, or build risk.
+
+## Token-efficient Codex use
+
+- Read only relevant docs for the current gate.
+- Prefer current-diff review after Gate 0.
+- Keep prompts under 120 lines when possible.
+- Avoid rerunning full repo exploration unless architecture changed.
+- Avoid broad refactors.
+- Keep each Codex task under 8 files when possible.
+- Prefer micro-slices over whole-gate implementation.
 
 ## Recommended command flow
 
@@ -61,14 +84,13 @@ Use Full Auto only for bounded implementation gates after the repo has a clean g
 
 ## Read order for Codex
 
+Default read order for major gates:
 1. `AGENTS.md`
-2. `docs/product/PRD.md`
-3. `docs/design/DESIGN_SYSTEM.md`
-4. `docs/engineering/TECH_SPEC.md`
-5. `docs/engineering/DATA_MODEL.md`
-6. `docs/engineering/RLS_POLICY.md`
-7. `docs/engineering/IMPLEMENTATION_PLAN.md`
-8. Current prompt under `prompts/`
+2. `docs/agents/README.md`
+3. Current gate prompt under `prompts/`
+4. Only the product/design/engineering docs relevant to the current gate
+
+Do not reread unrelated docs on every micro-slice unless the architecture or product scope changed.
 
 ## Core rule
 
